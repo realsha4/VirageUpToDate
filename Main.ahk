@@ -1,6 +1,5 @@
 ; Virage GAG Macro [PREMIUM/PAID VERSION]
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #SingleInstance, Force
 #NoEnv
@@ -1085,10 +1084,9 @@ Gui, Add, Edit, x180 y165 w40 h18 Limit1 vSavedKeybind gUpdateKeybind, %SavedKey
     ; Gui, Add, Button, x50 y270 w100 h25 gDonate vDonate2500 BackgroundF0F0F0, 2500 Robux
     ; Gui, Add, Button, x50 y330 w100 h25 gDonate vDonate10000 BackgroundF0F0F0, 10000 Robux
     
-    Gui, Show, w520 h460, Virage Premium Modified
-
     ; In the main ShowGui: (top GUI setup), add this to Tab 5 (Settings tab) where other buttons are:
     Gui, Add, Button, x400 y200 w85 h18 gCheckForUpdate Background202020, Check for Update
+    Gui, Show, w520 h460, Virage Premium Modified [Pet mutation upd] B3
 
 Return
 
