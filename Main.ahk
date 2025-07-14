@@ -1,4 +1,4 @@
-; Virage GAG Macro [FREE VERSION]
+; Virage GAG Macro [PREMIUM/PAID VERSION]
 
 #SingleInstance, Force
 #NoEnv
@@ -45,7 +45,6 @@ global msgBoxCooldown := 0
 
 global gearAutoActive := 0
 global seedAutoActive := 0
-global eggAutoActive  := 0
 global cosmeticAutoActive := 0
 global honeyShopAutoActive := 0
 global honeyDepositAutoActive := 0
@@ -821,17 +820,15 @@ quickDetect(color1, color2, variation := 10, x1Ratio := 0.0, y1Ratio := 0.0, x2R
 
 ; item arrays
 
-seedItems := ["Carrot Seed", "Strawberry Seed", "Blueberry Seed", "Tomato Seed"
-             , "Cauliflower Seed", "Watermelon Seed", "Rafflesia Seed"
-             , "Green Apple Seed", "Avocado Seed", "Banana Seed", "Pineapple Seed"
-             , "Kiwi Seed", "Bell Pepper Seed", "Prickly Pear Seed", "Loquat Seed"
-             , "Feijoa Seed", "Pitcher Plant", "Sugar Apple"]
+seedItems := ["Carrot Seed", "Strawberry Seed", "Blueberry Seed", "Orange Tulip", "Tomato Seed"
+             , "Daffodil Seed", "Watermelon Seed", "Pumpkin Seed", "Apple Seed", "Bamboo Seed"
+             , "Coconut Seed", "Cactus Seed", "Dragon Fruit Seed", "Mango Seed", "Grape Seed"
+             , "Mushroom Seed", "Pepper Seed", "Cacao Seed", "Beanstalk Seed", "Ember Lily"
+             , "Sugar Apple", "Burning Bud", "Giant Pinecone Seed"]
 
 gearItems := ["Watering Can", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler"
-             , "Godly Sprinkler", "Magnifying Glass", "Tanning Mirror", "Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool", "Friendship Pot"]
-
-eggItems := ["Common Egg", "Common Summer Egg", "Rare Summer Egg", "Mythical Egg", "Paradise Egg"
-             , "Bee Egg", "Bug Egg"]
+             , "Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", "Tanning Mirror", "Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool", "Friendship Pot"
+             , "Levelup Lollipop"]
 
 cosmeticItems := ["Cosmetic 1", "Cosmetic 2", "Cosmetic 3", "Cosmetic 4", "Cosmetic 5"
              , "Cosmetic 6",  "Cosmetic 7", "Cosmetic 8", "Cosmetic 9"]
@@ -854,7 +851,7 @@ craftItems2 := ["Tropical Mist Sprinkler", "Berry Blusher Sprinkler"
 
 settingsFile := A_ScriptDir "\settings.ini"
 
-/*
+
 fff(username) {
     global GAME_PASS_ID
     username := Trim(username)
@@ -880,6 +877,8 @@ fff(username) {
 
 
 IniRead, isVerified, %settingsFile%, Main, %VERIFIED_KEY%, 0
+; Bypass gamepass verification for stress testing
+isVerified := 1
 if (!isVerified) {
     InputBox, rbUser, Premium Access, Please enter your Roblox username:
     if (ErrorLevel)
@@ -894,7 +893,7 @@ if (!isVerified) {
         ExitApp
     }
 }
-*/
+
 
 Gosub, ShowGui
 
@@ -906,7 +905,7 @@ ShowGui:
     Gui, Margin, 10, 10
     Gui, Color, 0x202020
     Gui, Font, s9 cWhite, Segoe UI
-    Gui, Add, Tab, x10 y10 w580 h440 vMyTab, Seeds|Gears|Eggs|Cosmetics|Settings|Credits
+    Gui, Add, Tab, x10 y10 w580 h440 vMyTab, Seeds|Gears|Cosmetics|Settings|Credits
 
     Gui, Tab, 1
     Gui, Font, s9 c90EE90 Bold, Segoe UI
@@ -955,53 +954,6 @@ ShowGui:
         Gui, Add, Checkbox, % "x" col " y" y " vGearItem" A_Index " gHandleSelectAll cD3D3D3 " . (gVal ? "Checked" : ""), % gearItems[A_Index]
     }
 
-    Gui, Tab, 3
-    Gui, Font, s9 ce87b07 Bold, Segoe UI
-    Gui, Add, GroupBox, x23 y50 w475 h340 ce87b07, Egg Shop
-    IniRead, SelectAllEggs, %settingsFile%, Egg, SelectAllEggs, 0
-    Gui, Add, Checkbox, % "x50 y90 vSelectAllEggs gHandleSelectAll ce87b07 " . (SelectAllEggs ? "Checked" : ""), Select All Eggs
-    Loop, % eggItems.Length() {
-        IniRead, eVal, %settingsFile%, Egg, Item%A_Index%, 0
-        y := 125 + (A_Index - 1) * 25
-        Gui, Add, Checkbox, % "x50 y" y " vEggItem" A_Index " gHandleSelectAll cD3D3D3 " . (eVal ? "Checked" : ""), % eggItems[A_Index]
-    }
-
-    /*
-    Gui, Tab, 4
-    Gui, Font, s9 ce8ac07 Bold, Segoe UI
-    Gui, Add, GroupBox, x23 y50 w475 h340 ce8ac07, Honey
-    IniRead, AutoCollectPollinated, %settingsFile%, Honey, AutoCollectPollinated, 0
-    Gui, Add, Checkbox, % "x50 y90 vAutoCollectPollinated ce8ac07 " . (AutoCollectPollinated ? "Checked" : ""), Auto-Collect Pollinated Plants
-    IniRead, AutoHoney, %settingsFile%, Honey, AutoDepositHoney, 0
-    Gui, Add, Checkbox, % "x50 y115 vAutoHoney ce8ac07 " . (AutoHoney ? "Checked" : ""), Auto-Deposit Honey
-
-
-    Gui, Tab, 5
-    Gui, Font, s9 cBF40BF Bold, Segoe UI
-
-    Gui, Add, GroupBox, x23 y50 w230 h380 cBF40BF, Crafting Seeds
-    Gui, Add, Text, x40 y130 w200 h40, Coming soon
-
-    IniRead, SelectAllCraft, %settingsFile%, Craft, SelectAllCraft, 0
-    Gui, Add, Checkbox, % "x40 y90 vSelectAllCraft gHandleSelectAll cBF40BF " . (SelectAllCraft ? "Checked" : ""), Select All Seeds
-    Loop, % craftItems.Length() {
-        IniRead, cVal,   %settingsFile%, Craft, Item%A_Index%, 0
-        y := 125 + (A_Index - 1) * 25
-        Gui, Add, Checkbox, % "x40 y" y " vCraftItem" A_Index " gHandleSelectAll cD3D3D3 " . (cVal ? "Checked" : ""), % craftItems[A_Index]
-    }
- 
-
-    Gui, Add, GroupBox, x270 y50 w230 h380 cBF40BF, Crafting Tools
-
-    IniRead, SelectAllCraft2, %settingsFile%, Craft2, SelectAllCraft2, 0
-    Gui, Add, Checkbox, % "x280 y90 vSelectAllCraft2 gHandleSelectAll cBF40BF " . (SelectAllCraft2 ? "Checked" : ""), Select All Tools
-    Loop, % craftItems2.Length() {
-        IniRead, c2Val,  %settingsFile%, Craft2, Item%A_Index%, 0
-        y := 125 + (A_Index - 1) * 25
-        Gui, Add, Checkbox, % "x280 y" y " vCraftItem2" A_Index " gHandleSelectAll cD3D3D3 " . (c2Val ? "Checked" : ""), % craftItems2[A_Index]
-    }
-    */
-
     Gui, Tab, 4
     Gui, Font, s9 cD41551 Bold, Segoe UI
     Gui, Add, GroupBox, x23 y50 w475 h340 cD41551, Cosmetic Shop
@@ -1035,6 +987,10 @@ ShowGui:
     autoColor := AutoAlign ? "c90EE90" : "cD3D3D3"
     Gui, Add, Checkbox, % "x50 y250 vAutoAlign gUpdateSettingColor " . autoColor . (AutoAlign ? " Checked" : ""), Auto-Align
 
+    IniRead, MultiInstanceMode, %settingsFile%, Main, MultiInstanceMode, 0
+    multiInstanceColor := MultiInstanceMode ? "c90EE90" : "cD3D3D3"
+    Gui, Add, Checkbox, % "x50 y275 vMultiInstanceMode gUpdateSettingColor " . multiInstanceColor . (MultiInstanceMode ? " Checked" : ""), Multi-Instance Mode
+
     Gui, Font, s8 cD3D3D3 Bold, Segoe UI
     Gui, Add, Text, x50 y90, Webhook URL:
     Gui, Font, s8 cBlack, Segoe UI
@@ -1058,6 +1014,16 @@ ShowGui:
     Gui, Add, Button, x400 y115 w85 h18 gUpdateUserID Background202020, Save UserID
     IniRead, savedUserID, %settingsFile%, Main, DiscordUserID
 
+
+    Gui, Add, Text, x50 y140, Private Server:
+    Gui, Font, s8 cBlack, Segoe UI
+    IniRead, savedServerLink, %settingsFile%, Main, PrivateServerLink
+    if (savedServerLink = "ERROR") {
+        savedServerLink := ""
+    }
+    Gui, Add, Edit, x140 y140 w250 h18 vprivateServerLink +BackgroundFFFFFF, %savedServerLink%
+    Gui, Font, s8 cD3D3D3 Bold, Segoe UI
+    Gui, Add, Button, x400 y140 w85 h18 gDisplayServerValidity Background202020, Save Link
 
     Gui, Add, Button, x400 y165 w85 h18 gClearSaves Background202020, Clear Saves
 
@@ -1117,7 +1083,7 @@ Gui, Add, Edit, x180 y165 w40 h18 Limit1 vSavedKeybind gUpdateKeybind, %SavedKey
     ; Gui, Add, Button, x50 y270 w100 h25 gDonate vDonate2500 BackgroundF0F0F0, 2500 Robux
     ; Gui, Add, Button, x50 y330 w100 h25 gDonate vDonate10000 BackgroundF0F0F0, 10000 Robux
     
-    Gui, Show, w520 h460, Virage Premium GAG Macro [FREE VERSION]
+    Gui, Show, w520 h460, Virage Premium Modified
 
 Return
 
@@ -1358,13 +1324,6 @@ UpdateSelectedItems:
             selectedGearItems.Push(gearItems[A_Index])
     }
 
-    selectedEggItems := []
-
-    Loop, % eggItems.Length() {
-        if (eggItem%A_Index%)
-            selectedEggItems.Push(eggItems[A_Index])
-    }
-
     selectedHoneyItems := []
 
     Loop, % realHoneyItems.Length() {
@@ -1385,11 +1344,6 @@ GetSelectedItems() {
     if (selectedGearItems.Length()) {
         result .= "Gear Items:`n"
         for _, name in selectedGearItems
-            result .= "  - " name "`n"
-    }
-    if (selectedEggItems.Length()) {
-        result .= "Egg Items:`n"
-        for _, name in selectedEggItems
             result .= "  - " name "`n"
     }
     if (selectedHoneyItems.Length()) {
@@ -1574,31 +1528,6 @@ BuyGear:
 
 Return
 
-AutoBuyEggShop:
-
-    ; queues if its not the first cycle and the time is a multiple of 30
-    if (cycleCount > 0 && Mod(currentMinute, 30) = 0 && currentMinute != lastEggShopMinute) {
-        lastEggShopMinute := currentMinute
-        SetTimer, PushBuyEggShop, -8000
-    }
-
-Return
-
-PushBuyEggShop: 
-
-    actionQueue.Push("BuyEggShop")
-
-Return
-
-BuyEggShop:
-
-    currentSection := "BuyEggShop"
-    if (selectedEggItems.Length()) {
-        Gosub, EggShopPath
-    } 
-
-Return
-
 AutoBuyCosmeticShop:
 
     ; queues if its not the first cycle, the minute is 0, and the current hour is an even number (every 2 hours)
@@ -1760,8 +1689,8 @@ SetToolTip:
     if (selectedGearItems.Length()) {
         tooltipText .= "Gear Shop: " . gearText . "`n"
     }
-    if (selectedEggItems.Length()) {
-        tooltipText .= "Egg Shop : " . eggText . "`n"
+    if (selectedHoneyItems.Length()) {
+        tooltipText .= "Honey Shop: " . honeyText . "`n"
     }
     if (BuyAllCosmetics) {
         tooltipText .= "Cosmetic Shop: " . cosText . "`n"
@@ -1803,12 +1732,6 @@ SetTimers:
     }
     gearAutoActive := 1
     SetTimer, AutoBuyGear, 1000 ; checks every second if it should queue
-
-    if (selectedEggItems.Length()) {
-        actionQueue.Push("BuyEggShop")
-    }
-    eggAutoActive := 1
-    SetTimer, AutoBuyEggShop, 1000 ; checks every second if it should queue
 
     if (BuyAllCosmetics) {
         actionQueue.Push("BuyCosmeticShop")
@@ -2613,7 +2536,7 @@ SaveSettings:
     IniWrite, % SelectAllSeeds,        %settingsFile%, Seed, SelectAllSeeds
 
     ; — Honey section —
-    ; first the “place” items 1–10
+    ; first the "place" items 1–10
     Loop, 10
         IniWrite, % (HoneyItem%A_Index%  ? 1 : 0), %settingsFile%, Honey, Item%A_Index%
     IniWrite, % SelectAllHoney,        %settingsFile%, Honey, SelectAllHoney
