@@ -1,5 +1,7 @@
 ; Virage GAG Macro [PREMIUM/PAID VERSION]
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 #SingleInstance, Force
 #NoEnv
 SetWorkingDir %A_ScriptDir%
@@ -1084,6 +1086,9 @@ Gui, Add, Edit, x180 y165 w40 h18 Limit1 vSavedKeybind gUpdateKeybind, %SavedKey
     ; Gui, Add, Button, x50 y330 w100 h25 gDonate vDonate10000 BackgroundF0F0F0, 10000 Robux
     
     Gui, Show, w520 h460, Virage Premium Modified
+
+    ; In the main ShowGui: (top GUI setup), add this to Tab 5 (Settings tab) where other buttons are:
+    Gui, Add, Button, x400 y200 w85 h18 gCheckForUpdate Background202020, Check for Update
 
 Return
 
@@ -2632,3 +2637,24 @@ Gosub, StartScanMultiInstance
 Return
 
 #MaxThreadsPerHotkey, 2
+
+; Function to download and replace Main.ahk with the latest version from GitHub
+UpdateScriptToLatest() {
+    localFile := A_ScriptDir "\Main.ahk"
+    downloadUrl := "https://raw.githubusercontent.com/realsha4/VirageUpToDate/main/Main.ahk"
+    tempFile := A_ScriptDir "\Main_new.ahk"
+    UrlDownloadToFile, %downloadUrl%, %tempFile%
+    if (!FileExist(tempFile)) {
+        MsgBox, 16, Update Error, Failed to download the new version.
+        return
+    }
+    FileMove, %tempFile%, %localFile%, 1
+    MsgBox, 0, Update Complete, The script has been updated. It will now reload.
+    Reload
+}
+
+; Add a button to the GUI for update checking
+ 
+CheckForUpdate:
+    UpdateScriptToLatest()
+Return
